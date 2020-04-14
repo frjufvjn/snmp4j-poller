@@ -1,0 +1,12 @@
+pds01,10.1.12.231,public,v2c,passwd
+pds02,10.1.12.231,public,v2c,passwd
+pds03,10.1.12.232,ismon,v3,ismon123!
+pds04,10.1.12.231,public,v2c,passwd
+pds05,10.1.12.231,public,v2c,passwd
+pds06,10.1.12.232,ismon,v3,ismon123!
+pds07,10.1.12.231,public,v2c,passwd
+pds08,10.1.12.231,public,v2c,passwd
+pds09,10.1.12.232,ismon,v3,ismon123!
+pds10,10.1.12.231,public,v2c,passwd
+pds11,10.1.12.231,public,v2c,passwd
+pds12,10.1.12.232,ismon,v3,ismon123!
