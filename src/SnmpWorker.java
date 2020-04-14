@@ -246,9 +246,10 @@ public class SnmpWorker implements Callable {
 					calcProc.put("data", resProcList);
 				}
 				
-				System.out.println("    >> " + calc.toString());
-				System.out.println("    >> " + calcProc.toString());
-				System.out.println(deviceId + " is end.....................................................");
+				// jw System.out.println("    >> " + calc.toString());
+				// jw System.out.println("    >> " + calcProc.toString());
+				// jw System.out.println("    >>" + calcDisk.toString());
+				// jw System.out.println(deviceId + " is end.....................................................");
 				
 				
 				calc.clear();
@@ -326,10 +327,10 @@ public class SnmpWorker implements Callable {
 		try {
 			boolean wait = latch.await(threadTimeoutMills, TimeUnit.MILLISECONDS);
 			if (wait) {
-				System.out.println("end occursNo:"+idx+", ipaddress:"+ipaddress+", oid:"+tableOid+
-						", CountDownLatch Wait : "+wait+", elapsed: "+(System.currentTimeMillis() - start)+"ms");
+				/*System.out.println("end occursNo:"+idx+", ipaddress:"+ipaddress+", oid:"+tableOid+
+						", CountDownLatch Wait : "+wait+", elapsed: "+(System.currentTimeMillis() - start)+"ms");*/
 			} else {
-				System.err.println("end occursNo:"+idx+", ipaddress:"+ipaddress+", CountDownLatch Wait : " + wait);
+				System.err.println("Error end occursNo:"+idx+", ipaddress:"+ipaddress+", CountDownLatch Wait : " + wait);
 			}
 		} catch (InterruptedException e) {
 			System.err.println("snmp InterruptedException (try to interrupt!!) " +  e);

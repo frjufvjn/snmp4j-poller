@@ -17,7 +17,7 @@ import org.quartz.JobExecutionException;
 
 public class SnmpPoller implements Job {
 
-	private final static int threadPoolSize = 5;
+	private final static int threadPoolSize = 10;
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
@@ -41,7 +41,7 @@ public class SnmpPoller implements Job {
 			protected void done() {
 				try {
 					boolean callSuccess = ((Boolean) get()).booleanValue();
-					System.out.println("future task callSuccess : "+ callSuccess + ", deviceid : " + map.get("deviceid"));
+					// System.out.println("future task callSuccess : "+ callSuccess + ", deviceid : " + map.get("deviceid"));
 				} catch (InterruptedException e) {
 					System.out.println("[InterruptedException] " + e.getMessage());
 					Thread.currentThread().interrupt();
@@ -66,6 +66,7 @@ public class SnmpPoller implements Job {
 				String sLine = null; 
 				while( (sLine = inFile.readLine()) != null ) {
 					// System.out.println(sLine);
+					if ( sLine.startsWith("#") ) continue;
 					String[] arr = sLine.split("\\,");
 					Map<String,Object> hm = new HashMap<>();
 					hm.put("deviceid", arr[0]);
