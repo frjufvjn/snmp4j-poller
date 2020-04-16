@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -21,9 +22,12 @@ public class SnmpPoller implements Job {
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+		executeCall();
+	}
+	
+	public void executeCall() {
 		System.out.println("Job Executed [" + new Date(System.currentTimeMillis()) + "]"
-				+ "--------------------------------------------------------------------------------"); 
-
+				+ "--------------------------------------------------------------------------------");
 		List<Map<String,Object>> servers = getServersFromConfig();
 
 		for (Map<String, Object> map : servers) {
@@ -53,6 +57,15 @@ public class SnmpPoller implements Job {
 
 		es.execute(future);
 		es.shutdown();
+
+		try {
+			if (!es.awaitTermination(29, TimeUnit.SECONDS)) {
+				es.shutdownNow();
+			}
+		} catch (InterruptedException ex) {
+			es.shutdownNow();
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	private List<Map<String,Object>> getServersFromConfig() {

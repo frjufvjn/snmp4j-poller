@@ -133,11 +133,18 @@ public class SnmpWorker implements Callable {
 
 			CompletableFuture.allOf(completableFuture1, completableFuture2, completableFuture3, completableFuture4)
 			.thenAccept(s -> {
+
+				try {
+					snmp.close();
+				} catch (IOException e) {
+					System.err.println("snmp close exception : " + e);
+				}
+
 				List<Map<String,String>> result = futures.stream()
 						.map(pageContentFuture -> pageContentFuture.join())
 						.collect(Collectors.toList());
 				System.out.println("  # " + hm.get("deviceid") + " final result size : " + result.size());
-				
+
 				Map<String,Object> calc = new HashMap<String,Object>();
 				Map<String,Object> calcDisk = new HashMap<String,Object>();
 				calc.put("ip", ipaddress);
@@ -245,22 +252,17 @@ public class SnmpWorker implements Callable {
 					});
 					calcProc.put("data", resProcList);
 				}
-				
-				// jw System.out.println("    >> " + calc.toString());
-				// jw System.out.println("    >> " + calcProc.toString());
-				// jw System.out.println("    >>" + calcDisk.toString());
-				// jw System.out.println(deviceId + " is end.....................................................");
-				
-				
+
+//				 /*jw*/ System.out.println("    >> " + calc.toString());
+//				 /*jw*/ System.out.println("    >> " + calcProc.toString());
+//				 /*jw*/ System.out.println("    >>" + calcDisk.toString());
+//				 /*jw*/ System.out.println(deviceId + " is end.....................................................");
+
+
 				calc.clear();
 				calcDisk.clear();
 				calcProc.clear();
 
-				try {
-					snmp.close();
-				} catch (IOException e) {
-					System.err.println("snmp close exception : " + e);
-				}
 			});
 
 		} catch (Exception e) {
