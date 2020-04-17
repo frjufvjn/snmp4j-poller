@@ -18,19 +18,28 @@ public class MultiThreadTest {
 	}
 
 	private void multiPoller() {
+
+		final long start = System.currentTimeMillis();
+
 		ExecutorService es = Executors.newFixedThreadPool(threadPoolSize);
+
+		ProccessExecute pe = new ProccessExecute();
 
 		List<Callable<String>> callableTasks = new ArrayList<>();
 		for (int i=0; i<occursCount; i++) {
 			final int idx = i;
 			callableTasks.add(() -> {
-				return someBlokingJob("called : " + idx);
+				return pe.runCommand(idx + "");
 			});
 		}
+
+		System.out.println("INVOKE END--------------------");
 
 		try {
 			List<Future<String>> futures = es.invokeAll(callableTasks);
 			es.shutdown();
+
+			System.out.println("size : " + futures.size() + ", elapsed : " + (System.currentTimeMillis() - start) + "ms");
 
 			futures.stream().forEach(item -> {
 				try {
@@ -43,10 +52,13 @@ public class MultiThreadTest {
 				}
 			});
 
+
+
 			if (!es.awaitTermination(4000, TimeUnit.MILLISECONDS)) {
 				System.out.println("### NO AWAIT !!");
 				es.shutdownNow();
 			}
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			es.shutdownNow();
