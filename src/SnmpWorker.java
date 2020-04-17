@@ -383,10 +383,18 @@ public class SnmpWorker implements Callable {
 			final String passwd) {
 		Target target;
 		if ( "v3".equals(version) ) {
-			USM usm = new USM(SecurityProtocols.getInstance(), new OctetString(MPv3.createLocalEngineID()), 0);
+			
+			USM usm = USMFactory.getInstance().getUSM();
+			usm.setLocalEngine(new OctetString(MPv3.createLocalEngineID()), 0, usm.getEngineTime());
+			SecurityModels.getInstance().addSecurityModel(usm);
+			UsmUser user = new UsmUser(new OctetString(community), this.authProtocol, new OctetString(passwd), this.privProtocol, new OctetString(passwd));
+			usm.addUser(new OctetString(community), user);
+			
+			
+			/*USM usm = new USM(SecurityProtocols.getInstance(), new OctetString(MPv3.createLocalEngineID()), 0);
 			usm.addUser(new OctetString(community), new UsmUser(new OctetString(community), this.authProtocol,
 					new OctetString(passwd), this.privProtocol, new OctetString(passwd)));
-			SecurityModels.getInstance().addSecurityModel(usm);
+			SecurityModels.getInstance().addSecurityModel(usm);*/
 
 			target = createCommunity(ipaddress, community, passwd);
 		} else {
@@ -394,6 +402,8 @@ public class SnmpWorker implements Callable {
 		}
 		return target;
 	}
+	
+	
 
 
 	/**
