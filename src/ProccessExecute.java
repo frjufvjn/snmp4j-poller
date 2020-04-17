@@ -52,7 +52,7 @@ public class ProccessExecute {
 		} finally {
 			arguments.clear();
 			if (process != null) {
-				System.out.println("runCommand end, idx : " + arg);
+				System.out.println(Thread.currentThread().getName() + " runCommand end, idx : " + arg);
 				process.destroy();
 				process = null;
 			}
